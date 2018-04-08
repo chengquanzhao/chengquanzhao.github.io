@@ -258,6 +258,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/08/使用kotlin编写Gradle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="赵成全的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/08/使用kotlin编写Gradle/" itemprop="url">Unbenannt</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T18:46:00+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/08/使用kotlin编写Gradle/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h1 id="使用kotlin编写Gradle"><a href="#使用kotlin编写Gradle" class="headerlink" title="使用kotlin编写Gradle"></a>使用kotlin编写Gradle</h1><hr>
+<p>Kotlin 与 Gradle 可谓是亲密的一对，JetBrains 与 Gradle 分别发表了<a href="https://blog.jetbrains.com/kotlin/2016/05/gradle-meets-kotlin/" target="_blank" rel="noopener">Gradle Meets Kotlin</a>与<a href="https://blog.gradle.org/kotlin-meets-gradle" target="_blank" rel="noopener">Kotlin Meets Gradle</a>真的是激情满满。</p>
+<h2 id="使用kotlin-编写Gradle"><a href="#使用kotlin-编写Gradle" class="headerlink" title="使用kotlin 编写Gradle"></a>使用kotlin 编写Gradle</h2><p><strong>1.新建idea项目,构建工具选择gradle</strong></p>
+<p><img src="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E4%B8%80%E6%AD%A5.jpg" alt="gradle 第一张图片"><br><strong>2.填写groupID</strong></p>
+<p><img src="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E4%BA%8C%E6%AD%A5.jpg" alt="gradle 第二张图片"></p>
+<p><strong>选择默认的wrapper 一路下一步即可。</strong></p>
+<p><strong>项目build成功后，修改build.gradle文件为build.gradle.kts文件删除原有build.gradle中的groovy语法 编写Kotlin代码如下：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">	//指定组件</span><br><span class="line">plugins &#123;</span><br><span class="line">    	application</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">application&#123;</span><br><span class="line">    mainClassName = &quot;AndroidOreo&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>新建kotlin类，代码如下</strong></p>
+<pre><code>class Cat(var name: String){
+    fun sayMiao()= name+&quot;miao,miao&quot;
+}
+</code></pre><p><strong>新建java类：</strong></p>
+<pre><code>public class AndroidOreo {
+    public static void main(String[] args){
+        Cat cat = new Cat(&quot;BigTom&quot;);
+        System.out.println(cat.sayMiao());
+    }
+}
+</code></pre><p><strong>点击run执行:</strong></p>
+<p><img src="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E5%9B%9B%E5%BC%A0%E5%9B%BE%E7%89%87.jpg" alt="gradle第四张图片"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/基于ZXing的二维码自动生成与图片合成/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -698,7 +850,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
