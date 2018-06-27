@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="##写在前面  在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  ##具体实现   根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可">
+<meta name="description" content="写在前面 在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  具体实现  根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可以创建含有创">
 <meta property="og:type" content="article">
 <meta property="og:title" content="15天基于GoLang实现公有链（一）">
 <meta property="og:url" content="http://yoursite.com/2018/06/27/blockchainday1/index.html">
 <meta property="og:site_name" content="赵成全的博客">
-<meta property="og:description" content="##写在前面  在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  ##具体实现   根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可">
+<meta property="og:description" content="写在前面 在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  具体实现  根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可以创建含有创">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/%E7%94%9F%E6%88%90%E7%9A%84hash%E5%80%BC.jpg">
-<meta property="og:updated_time" content="2018-06-27T02:37:24.000Z">
+<meta property="og:updated_time" content="2018-06-27T02:41:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="15天基于GoLang实现公有链（一）">
-<meta name="twitter:description" content="##写在前面  在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  ##具体实现   根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可">
+<meta name="twitter:description" content="写在前面 在阅读本文章时，请确认你已掌握：区块链相关，包括公有链，私有链，挖矿等相关内容。Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。  具体实现  根据BlockDemo中的图解，面向对象-&amp;gt;设计模型。  创建区块对象: 一个完整的区块应该包括：区块高度,上一个区块HASH值,Data,时间戳,Nonce值。    创建区块链对象 区块链对象可以创建含有创">
 <meta name="twitter:image" content="http://oqlpa1sab.bkt.clouddn.com/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%A8%A1%E5%9E%8B.jpg">
 
 
@@ -293,7 +293,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T10:20:26+08:00">
                 2018-06-27
@@ -344,12 +344,10 @@
       
 
       
-        <p>##写在前面</p>
-<blockquote>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
 <p>在阅读本文章时，请确认你已掌握：<br>区块链相关，包括公有链，私有链，挖矿等相关内容。<br>Golang语言，Java,Kotlin开发也可以参考（因实现原来大体相同）。</p>
 </blockquote>
-<p>##具体实现</p>
-<p><img src="http://oqlpa1sab.bkt.clouddn.com/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p><img src="http://oqlpa1sab.bkt.clouddn.com/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
 <p> 根据<a href="https://anders.com/blockchain/blockchain.html" target="_blank" rel="noopener">BlockDemo</a>中的图解，面向对象-&gt;设计模型。</p>
 <ul>
 <li><p>创建区块对象:</p>
@@ -363,8 +361,7 @@
 <li><p>工作量证明对象（pow）</p>
 </li>
 </ul>
-<p>####创建区块对象 </p>
-<p>该区块对象有两个方法，分别是创建区块，创建创世区块。</p>
+<h4 id="创建区块对象"><a href="#创建区块对象" class="headerlink" title="创建区块对象"></a>创建区块对象</h4><p>该区块对象有两个方法，分别是创建区块，创建创世区块。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">package BLC</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;time&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">//定义区块</span><br><span class="line">type Block struct &#123;</span><br><span class="line">	//1.区块高度</span><br><span class="line">	Height int64</span><br><span class="line">	//2.上一个区块的Hash</span><br><span class="line">	ProBlockHash []byte</span><br><span class="line">	// 3.交易数据</span><br><span class="line">	Data []byte</span><br><span class="line">	//4.时间戳</span><br><span class="line">	Timestamp int64</span><br><span class="line">	//5.Hash</span><br><span class="line">	Hash []byte</span><br><span class="line">	//6.添加工作量证明</span><br><span class="line">	Nonce int64</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">	创建新的区块</span><br><span class="line">*/</span><br><span class="line">func CreateBlock(data string, heightBlock int64, preBlockHash []byte) *Block &#123;</span><br><span class="line"></span><br><span class="line">	// 创建一个没有Hash的区块</span><br><span class="line">	block := &amp;Block&#123;</span><br><span class="line">		heightBlock,</span><br><span class="line">		preBlockHash,</span><br><span class="line">		[]byte(data),</span><br><span class="line">		time.Now().Unix(),</span><br><span class="line">		nil,</span><br><span class="line">		0&#125;</span><br><span class="line">	//调用工作量证明的方法，返回有效的hash 和nonce值</span><br><span class="line">	pow := NewProofOfWork(block)</span><br><span class="line">	// 挖矿验证</span><br><span class="line">	hash, nonce := pow.Run()</span><br><span class="line">	fmt.Println()</span><br><span class="line">	block.Hash = hash[:]</span><br><span class="line">	block.Nonce = nonce</span><br><span class="line">	return block</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">	创建创世区块</span><br><span class="line">*/</span><br><span class="line">func CreateGenesisBlock(data string) *Block &#123;</span><br><span class="line">	//这里字节数组设置为32个0</span><br><span class="line">	return CreateBlock(data, 1, []byte&#123;0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0&#125;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>####创建区块链对象</p>
 <p>区块链对象可以创建一个含有创世区块的区块。</p>
@@ -373,7 +370,8 @@
 <p>每个区块对象产生都应该包含一个工作量证明</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">package BLC</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;math/big&quot;</span><br><span class="line">	&quot;bytes&quot;</span><br><span class="line">	&quot;crypto/sha256&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">const targetBit = 24</span><br><span class="line"></span><br><span class="line">type ProofOfWork struct &#123;</span><br><span class="line">	//区块当前需要验证的</span><br><span class="line">	Block *Block</span><br><span class="line">	// 代表大数据存储</span><br><span class="line">	target *big.Int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 创建新的工作量证明对象 一个区块 对应一个 工作量证明</span><br><span class="line">func NewProofOfWork(block *Block) *ProofOfWork &#123;</span><br><span class="line">	/*</span><br><span class="line">		big.Int 对象</span><br><span class="line">		0000 0001 -&gt; 向左边移动6位</span><br><span class="line">		0100 0000 -&gt; 64</span><br><span class="line">		0010 0000 -32 &lt; 64</span><br><span class="line">		当难度为16时候</span><br><span class="line">		只要小于 0000 0000 0000 0000 0000 0001 0011 ....&#123;共256位置&#125;....1010</span><br><span class="line">		左移256 - targetbit</span><br><span class="line">	*/</span><br><span class="line">	//实现为  创建一个初始值 为1 的target</span><br><span class="line">	target := big.NewInt(1)</span><br><span class="line">	target = target.Lsh(target, 256-targetBit)</span><br><span class="line"></span><br><span class="line">	return &amp;ProofOfWork&#123;block, target&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (ProofOfWork *ProofOfWork) Run() ([]byte, int64) &#123;</span><br><span class="line">	// 将block的属性拼接成字节数组</span><br><span class="line"></span><br><span class="line">	// 生成hash</span><br><span class="line"></span><br><span class="line">	// 判断hash 的有效性 阻塞循环</span><br><span class="line">	nonce := 0</span><br><span class="line">	// 存储新生成的hash</span><br><span class="line">	var hashInt big.Int</span><br><span class="line">	var hash [32]byte</span><br><span class="line">	for true &#123;</span><br><span class="line">		dataBytes := ProofOfWork.prepareData(nonce)</span><br><span class="line">		// 生成hash</span><br><span class="line">		hash = sha256.Sum256(dataBytes)</span><br><span class="line"></span><br><span class="line">		fmt.Printf(&quot;\r%x&quot;,hash)</span><br><span class="line">		hashInt.SetBytes(hash[:])</span><br><span class="line">		// 判断hashINT 是否小于target</span><br><span class="line">		if ProofOfWork.target.Cmp(&amp;hashInt) == 1 &#123;</span><br><span class="line">			break</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		nonce += 1</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return hash[:], int64(nonce)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//数据拼接 返回字节数组</span><br><span class="line"></span><br><span class="line">func (pow *ProofOfWork) prepareData(nonce int) []byte &#123;</span><br><span class="line">	data := bytes.Join([][]byte&#123;</span><br><span class="line">		pow.Block.Data,</span><br><span class="line">		pow.Block.ProBlockHash,</span><br><span class="line">		IntToHex(pow.Block.Timestamp),</span><br><span class="line">		IntToHex(int64(targetBit)),</span><br><span class="line">		IntToHex(int64(nonce)),</span><br><span class="line">		IntToHex(int64(pow.Block.Height)),</span><br><span class="line">	&#125;, []byte&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	return data</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="运行测试代码"><a href="#运行测试代码" class="headerlink" title="运行测试代码"></a>运行测试代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;DavidChain/basicPrototype7/BLC&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line"></span><br><span class="line">	// 创世区块</span><br><span class="line">	blockchain := BLC.CreateGenesisBlockChain()</span><br><span class="line"></span><br><span class="line">	// 新区快</span><br><span class="line">	blockchain.AddBlockchain(&quot;Send 1000 RMB To weixiaowei &quot;, blockchain.Blocks[len(blockchain.Blocks)-1].Height+1, blockchain.Blocks[len(blockchain.Blocks)-1].Hash)</span><br><span class="line">	blockchain.AddBlockchain(&quot;Send 20 RMB To weixiaowei &quot;, blockchain.Blocks[len(blockchain.Blocks)-1].Height+1, blockchain.Blocks[len(blockchain.Blocks)-1].Hash)</span><br><span class="line">	blockchain.AddBlockchain(&quot;Send 3300 RMB To weixiaowei &quot;, blockchain.Blocks[len(blockchain.Blocks)-1].Height+1, blockchain.Blocks[len(blockchain.Blocks)-1].Hash)</span><br><span class="line">	blockchain.AddBlockchain(&quot;Send 44500 RMB To weixiaowei &quot;, blockchain.Blocks[len(blockchain.Blocks)-1].Height+1, blockchain.Blocks[len(blockchain.Blocks)-1].Hash)</span><br><span class="line">	blockchain.AddBlockchain(&quot;Send 44500 RMB To weixiaowei &quot;, blockchain.Blocks[len(blockchain.Blocks)-1].Height+1, blockchain.Blocks[len(blockchain.Blocks)-1].Hash)</span><br><span class="line"></span><br><span class="line">	fmt.Println(len(blockchain.Blocks))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当前难度为l6,工作量证明中会打印相应的创建的Hash值:<br> <img src="http://oqlpa1sab.bkt.clouddn.com/%E7%94%9F%E6%88%90%E7%9A%84hash%E5%80%BC.jpg" alt=""></p>
+<p>当前难度为l6,工作量证明中会打印相应的创建的Hash值:</p>
+<p> <img src="http://oqlpa1sab.bkt.clouddn.com/%E7%94%9F%E6%88%90%E7%9A%84hash%E5%80%BC.jpg" alt=""></p>
 
       
     </div>
@@ -484,10 +482,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -508,7 +506,7 @@
                 <a href="/archives">
               
                   <span class="site-state-item-count">4</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -560,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行测试代码"><span class="nav-number">1.</span> <span class="nav-text">运行测试代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体实现"><span class="nav-number">2.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建区块对象"><span class="nav-number">2.0.1.</span> <span class="nav-text">创建区块对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行测试代码"><span class="nav-number">2.0.2.</span> <span class="nav-text">运行测试代码</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -590,7 +588,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
