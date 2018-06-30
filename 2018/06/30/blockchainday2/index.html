@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="赵成全的博客">
 <meta property="og:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/golang%E7%AC%AC%E4%BA%8C%E5%A4%A9%E6%89%93%E5%8D%B0.jpg">
-<meta property="og:updated_time" content="2018-06-30T02:50:46.000Z">
+<meta property="og:updated_time" content="2018-06-30T02:52:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="15天基于GoLang实现公有链（二）">
 <meta name="twitter:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
@@ -355,19 +355,15 @@
 <ul>
 <li>注意这里时间格式化输出必须为2006年，否则报错。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		// 打印当前区块链信息</span><br><span class="line">func (chain *BlockChain) PrintChain() &#123;</span><br><span class="line">	chainIterator := chain.Iterator()</span><br><span class="line">	for true &#123;</span><br><span class="line">		block := chainIterator.Next()</span><br><span class="line">		fmt.Printf(&quot;Height:%d\n&quot;, block.Height)</span><br><span class="line">		fmt.Printf(&quot;ProblockHash:%x\n&quot;, block.ProBlockHash)</span><br><span class="line">		fmt.Printf(&quot;currentHash:%x\n&quot;, block.Hash)</span><br><span class="line">		fmt.Printf(&quot;Data:%s\n&quot;, block.Data)</span><br><span class="line">		fmt.Printf(&quot;Nonce:%d\n&quot;, block.Nonce)</span><br><span class="line">		fmt.Printf(&quot;Time:%v\n&quot;, time.Unix(block.Timestamp, 0).Format(&quot;2006-01-02 03:04:05 pm&quot;))</span><br><span class="line">		fmt.Println()</span><br><span class="line"></span><br><span class="line">		var hashInt big.Int</span><br><span class="line">		hashInt.SetBytes(block.ProBlockHash)</span><br><span class="line">		if big.NewInt(0).Cmp(&amp;hashInt) == 0 &#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```	</span><br><span class="line">**在main中进行测试**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		// 打印当前区块链信息</span><br><span class="line">func (chain *BlockChain) PrintChain() &#123;</span><br><span class="line">	chainIterator := chain.Iterator()</span><br><span class="line">	for true &#123;</span><br><span class="line">		block := chainIterator.Next()</span><br><span class="line">		fmt.Printf(&quot;Height:%d\n&quot;, block.Height)</span><br><span class="line">		fmt.Printf(&quot;ProblockHash:%x\n&quot;, block.ProBlockHash)</span><br><span class="line">		fmt.Printf(&quot;currentHash:%x\n&quot;, block.Hash)</span><br><span class="line">		fmt.Printf(&quot;Data:%s\n&quot;, block.Data)</span><br><span class="line">		fmt.Printf(&quot;Nonce:%d\n&quot;, block.Nonce)</span><br><span class="line">		fmt.Printf(&quot;Time:%v\n&quot;, time.Unix(block.Timestamp, 0).Format(&quot;2006-01-02 03:04:05 pm&quot;))</span><br><span class="line">		fmt.Println()</span><br><span class="line"></span><br><span class="line">		var hashInt big.Int</span><br><span class="line">		hashInt.SetBytes(block.ProBlockHash)</span><br><span class="line">		if big.NewInt(0).Cmp(&amp;hashInt) == 0 &#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">**在main中进行测试**</span><br></pre></td></tr></table></figure>
 <pre><code>func main() {
-
-
 // 创世区块
-blockchain := BLC.CreateGenesisBlockChain()
-defer blockchain.DB.Close()
-blockchain.AddBlockchain(&quot;Send 1000 RMB To weixiaowei &quot;)
-blockchain.AddBlockchain(&quot;Send 2000 RMB To weixiaowei &quot;)
-blockchain.AddBlockchain(&quot;Send 3000 RMB To weixiaowei &quot;)
-
-blockchain.PrintChain()
-
+    blockchain := BLC.CreateGenesisBlockChain()
+    defer blockchain.DB.Close()
+    blockchain.AddBlockchain(&quot;Send 1000 RMB To weixiaowei &quot;)
+    blockchain.AddBlockchain(&quot;Send 2000 RMB To weixiaowei &quot;)
+    blockchain.AddBlockchain(&quot;Send 3000 RMB To weixiaowei &quot;)
+    blockchain.PrintChain()
 }
 </code></pre><p><code>`</code></p>
 <p>运行结果如下图所示：<br><img src="http://oqlpa1sab.bkt.clouddn.com/golang%E7%AC%AC%E4%BA%8C%E5%A4%A9%E6%89%93%E5%8D%B0.jpg" alt="运行结果"></p>
