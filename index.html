@@ -289,7 +289,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-30T10:33:45+08:00">
                 2018-06-30
@@ -343,92 +343,18 @@
         
           
             <h2 id="把区块链存储到数据库-严格来说是将所有区块存储数据库"><a href="#把区块链存储到数据库-严格来说是将所有区块存储数据库" class="headerlink" title="把区块链存储到数据库 严格来说是将所有区块存储数据库"></a>把区块链存储到数据库 严格来说是将所有区块存储数据库</h2><p> Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-value对存储在同一bucket中，类似于关系型数据库中的Table。因此，为了获取一个value，需要知道其所在的bucket以及对应的key。这里我们选用Bolt,只需要执行下面代码安装即可。关于Bolt的使用，这里不在介绍，可以通过<a href="https://github.com/boltdb/bolt/" target="_blank" rel="noopener">官方github查看</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	go get github.com/boltdb/bolt/...</span><br><span class="line"></span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">**修改main中代码**</span><br></pre></td></tr></table></figure>
-<pre><code>package main
-</code></pre><p>import (<br>    “DavidChain/basicPrototype10/BLC”<br>    “fmt”<br>    “github.com/boltdb/bolt”<br>    “log”<br>)</p>
-<p>func main() {<br>    block := BLC.CreateBlock(“test”, 1, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})<br>    fmt.Printf(“%d\n”, block.Nonce)<br>    fmt.Printf(“%x\n”, block.Hash)</p>
-<pre><code>db, err := bolt.Open(&quot;my.db&quot;, 0600, nil)
-if err != nil {
-    log.Fatal(err)
-}
-defer db.Close()
-// 更新数据库
-err = db.Update(func(tx *bolt.Tx) error {
-
-    //获得表对象
-    tableBlock := tx.Bucket([]byte(&quot;blocks&quot;))
-    tableBlock, err = tx.CreateBucket([]byte(&quot;blocks&quot;))
-    if err != nil {
-        log.Panic(&quot;Blocks Table Create Error...Pleaszzz Tray Again&quot;)
-    }
-
-    err = tableBlock.Put([]byte(&quot;l&quot;), block.Serialize())
-    if err != nil{
-        log.Panic(err)
-    }
-    return nil
-})
-
-if err != nil {
-    log.Panic(err)
-}
-
-err = db.View(func(tx *bolt.Tx) error {
-
-    tableBlock  := tx.Bucket([]byte(&quot;blocks&quot;))
-
-    if tableBlock!=nil {
-        blockData := tableBlock.Get([]byte(&quot;l&quot;))
-        //fmt.Printf(&quot;%s\n&quot;,blockData)
-        block := BLC.DeserializeBlock(blockData)
-        fmt.Printf(&quot;%v&quot;,block)
-    }
-    return nil
-})
-
-if err != nil {
-    log.Panic(err)
-}
-</code></pre><p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">	执行之后，会创建my.db文件，同时可以成功反序列化。在控制台打印当前区块信息。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**为方便对每个BlockChain中的block进行遍历创建BlockChainIterator对象**</span><br><span class="line"></span><br><span class="line">迭代器中会存储当前正在遍历的区块的Hash值，以及该区块所在的数据库 代码如下：</span><br></pre></td></tr></table></figure>
-<pre><code>package BLC
-</code></pre><p>import (<br>    “github.com/boltdb/bolt”<br>    “log”<br>)</p>
-<p>type BlockChainIterator struct {<br>    currentHash []byte   // 当前正在遍历的区块的hash值<br>    DB          <em>bolt.DB //当前的数据库<br>}<br>func (blockChainIterator </em>BlockChainIterator) Next() <em>Block {<br>    var block </em>Block</p>
-<pre><code>err := blockChainIterator.DB.View(func(tx *bolt.Tx) error {
-
-    bucket := tx.Bucket([]byte(blockTableName))
-
-    if bucket != nil {
-        currenHashBytes:= bucket.Get(blockChainIterator.currentHash)
-
-        //获取到当前迭代器当中的 currenthash 所对应的区块
-        block = DeserializeBlock(currenHashBytes)
-
-        // 更新迭代器 hash
-        blockChainIterator.currentHash = block.ProBlockHash
-
-    }
-
-
-    return nil
-})
-
-if err != nil {
-    log.Panic(err)
-}
-
-return block
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**在BlockChain中新增PrintChain方法**</span><br><span class="line"></span><br><span class="line">* 注意这里时间格式化输出必须为2006年，否则报错。</span><br></pre></td></tr></table></figure>
-<pre><code>// 打印当前区块链信息
-</code></pre><p>func (chain *BlockChain) PrintChain() {<br>    chainIterator := chain.Iterator()<br>    for true {<br>        block := chainIterator.Next()<br>        fmt.Printf(“Height:%d\n”, block.Height)<br>        fmt.Printf(“ProblockHash:%x\n”, block.ProBlockHash)<br>        fmt.Printf(“currentHash:%x\n”, block.Hash)<br>        fmt.Printf(“Data:%s\n”, block.Data)<br>        fmt.Printf(“Nonce:%d\n”, block.Nonce)<br>        fmt.Printf(“Time:%v\n”, time.Unix(block.Timestamp, 0).Format(“2006-01-02 03:04:05 pm”))<br>        fmt.Println()</p>
-<pre><code>    var hashInt big.Int
-    hashInt.SetBytes(block.ProBlockHash)
-    if big.NewInt(0).Cmp(&amp;hashInt) == 0 {
-        break;
-    }
-}
-</code></pre><p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**在main中进行测试**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/boltdb/bolt/...</span><br></pre></td></tr></table></figure>
+<p><strong>修改main中代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">			package main</span><br><span class="line"></span><br><span class="line">	import (</span><br><span class="line">		&quot;DavidChain/basicPrototype10/BLC&quot;</span><br><span class="line">		&quot;fmt&quot;</span><br><span class="line">		&quot;github.com/boltdb/bolt&quot;</span><br><span class="line">		&quot;log&quot;</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	func main() &#123;</span><br><span class="line">	block := BLC.CreateBlock(&quot;test&quot;, 1, []byte&#123;0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0&#125;)</span><br><span class="line">	fmt.Printf(&quot;%d\n&quot;, block.Nonce)</span><br><span class="line">	fmt.Printf(&quot;%x\n&quot;, block.Hash)</span><br><span class="line"></span><br><span class="line">	db, err := bolt.Open(&quot;my.db&quot;, 0600, nil)</span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	defer db.Close()</span><br><span class="line">	// 更新数据库</span><br><span class="line">	err = db.Update(func(tx *bolt.Tx) error &#123;</span><br><span class="line"></span><br><span class="line">		//获得表对象</span><br><span class="line">		tableBlock := tx.Bucket([]byte(&quot;blocks&quot;))</span><br><span class="line">		tableBlock, err = tx.CreateBucket([]byte(&quot;blocks&quot;))</span><br><span class="line">		if err != nil &#123;</span><br><span class="line">			log.Panic(&quot;Blocks Table Create Error...Pleaszzz Tray Again&quot;)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		err = tableBlock.Put([]byte(&quot;l&quot;), block.Serialize())</span><br><span class="line">		if err != nil&#123;</span><br><span class="line">			log.Panic(err)</span><br><span class="line">		&#125;</span><br><span class="line">		return nil</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.Panic(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = db.View(func(tx *bolt.Tx) error &#123;</span><br><span class="line"></span><br><span class="line">		tableBlock  := tx.Bucket([]byte(&quot;blocks&quot;))</span><br><span class="line"></span><br><span class="line">		if tableBlock!=nil &#123;</span><br><span class="line">			blockData := tableBlock.Get([]byte(&quot;l&quot;))</span><br><span class="line">			//fmt.Printf(&quot;%s\n&quot;,blockData)</span><br><span class="line">			block := BLC.DeserializeBlock(blockData)</span><br><span class="line">			fmt.Printf(&quot;%v&quot;,block)</span><br><span class="line">		&#125;</span><br><span class="line">		return nil</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.Panic(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>执行之后，会创建my.db文件，同时可以成功反序列化。在控制台打印当前区块信息。
+</code></pre><p><strong>为方便对每个BlockChain中的block进行遍历创建BlockChainIterator对象</strong></p>
+<p>迭代器中会存储当前正在遍历的区块的Hash值，以及该区块所在的数据库 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">	package BLC</span><br><span class="line">import (</span><br><span class="line">	&quot;github.com/boltdb/bolt&quot;</span><br><span class="line">	&quot;log&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">type BlockChainIterator struct &#123;</span><br><span class="line">	currentHash []byte   // 当前正在遍历的区块的hash值</span><br><span class="line">	DB          *bolt.DB //当前的数据库</span><br><span class="line">&#125;</span><br><span class="line">func (blockChainIterator *BlockChainIterator) Next() *Block &#123;</span><br><span class="line">	var block *Block</span><br><span class="line"></span><br><span class="line">	err := blockChainIterator.DB.View(func(tx *bolt.Tx) error &#123;</span><br><span class="line"></span><br><span class="line">		bucket := tx.Bucket([]byte(blockTableName))</span><br><span class="line"></span><br><span class="line">		if bucket != nil &#123;</span><br><span class="line">			currenHashBytes:= bucket.Get(blockChainIterator.currentHash)</span><br><span class="line"></span><br><span class="line">			//获取到当前迭代器当中的 currenthash 所对应的区块</span><br><span class="line">			block = DeserializeBlock(currenHashBytes)</span><br><span class="line"></span><br><span class="line">			// 更新迭代器 hash</span><br><span class="line">			blockChainIterator.currentHash = block.ProBlockHash</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		return nil</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	if err != nil &#123;</span><br><span class="line">		log.Panic(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return block</span><br></pre></td></tr></table></figure>
+<p><strong>在BlockChain中新增PrintChain方法</strong></p>
+<ul>
+<li>注意这里时间格式化输出必须为2006年，否则报错。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">		// 打印当前区块链信息</span><br><span class="line">func (chain *BlockChain) PrintChain() &#123;</span><br><span class="line">	chainIterator := chain.Iterator()</span><br><span class="line">	for true &#123;</span><br><span class="line">		block := chainIterator.Next()</span><br><span class="line">		fmt.Printf(&quot;Height:%d\n&quot;, block.Height)</span><br><span class="line">		fmt.Printf(&quot;ProblockHash:%x\n&quot;, block.ProBlockHash)</span><br><span class="line">		fmt.Printf(&quot;currentHash:%x\n&quot;, block.Hash)</span><br><span class="line">		fmt.Printf(&quot;Data:%s\n&quot;, block.Data)</span><br><span class="line">		fmt.Printf(&quot;Nonce:%d\n&quot;, block.Nonce)</span><br><span class="line">		fmt.Printf(&quot;Time:%v\n&quot;, time.Unix(block.Timestamp, 0).Format(&quot;2006-01-02 03:04:05 pm&quot;))</span><br><span class="line">		fmt.Println()</span><br><span class="line"></span><br><span class="line">		var hashInt big.Int</span><br><span class="line">		hashInt.SetBytes(block.ProBlockHash)</span><br><span class="line">		if big.NewInt(0).Cmp(&amp;hashInt) == 0 &#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```	</span><br><span class="line">**在main中进行测试**</span><br></pre></td></tr></table></figure>
 <pre><code>func main() {
 
 
@@ -519,7 +445,7 @@ blockchain.PrintChain()
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-27T10:20:26+08:00">
                 2018-06-27
@@ -676,7 +602,7 @@ blockchain.PrintChain()
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T18:46:00+08:00">
                 2018-04-08
@@ -826,7 +752,7 @@ blockchain.PrintChain()
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-29T15:20:48+08:00">
                 2018-03-29
@@ -968,7 +894,7 @@ blockchain.PrintChain()
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-08T10:46:23+08:00">
                 2018-03-08
@@ -1108,7 +1034,7 @@ blockchain.PrintChain()
                 <a href="/archives">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -1174,7 +1100,7 @@ blockchain.PrintChain()
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
