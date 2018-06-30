@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="">
+<html class="theme-next pisces use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="go," />
 
 
 
@@ -80,13 +80,15 @@
 
 
 <meta name="description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
+<meta name="keywords" content="go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="15天基于GoLang实现公有链（二）">
 <meta property="og:url" content="http://yoursite.com/2018/06/30/blockchainday2/index.html">
 <meta property="og:site_name" content="赵成全的博客">
 <meta property="og:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
+<meta property="og:locale" content="en">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/golang%E7%AC%AC%E4%BA%8C%E5%A4%A9%E6%89%93%E5%8D%B0.jpg">
-<meta property="og:updated_time" content="2018-06-30T03:04:55.000Z">
+<meta property="og:updated_time" content="2018-06-30T10:48:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="15天基于GoLang实现公有链（二）">
 <meta name="twitter:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
@@ -148,7 +150,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -193,42 +195,32 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-首页">
+        <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Home
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-文章">
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            文章
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-学习">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
-            
-            学习
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-生活">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
-            
-            生活
+            Archives
           </a>
         </li>
       
@@ -292,7 +284,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-30T10:33:45+08:00">
                 2018-06-30
@@ -398,6 +390,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/go/" rel="tag"># go</a>
+          
+        </div>
+      
 
       
       
@@ -469,10 +467,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -490,16 +488,34 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -575,7 +591,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

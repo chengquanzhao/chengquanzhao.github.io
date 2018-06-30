@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="">
+<html class="theme-next pisces use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Kotlin," />
 
 
 
@@ -80,15 +80,17 @@
 
 
 <meta name="description" content="Kotlin 与 Gradle 可谓是亲密的一对，JetBrains 与 Gradle 分别发表了Gradle Meets Kotlin与Kotlin Meets Gradle真的是激情满满。 使用kotlin 编写Gradle1.新建idea项目,构建工具选择gradle 2.填写groupID  选择默认的wrapper 一路下一步即可。 项目build成功后，修改build.gradle文件">
+<meta name="keywords" content="Kotlin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用kotlin编写Gradle">
 <meta property="og:url" content="http://yoursite.com/2018/04/08/使用kotlin编写Gradle/index.html">
 <meta property="og:site_name" content="赵成全的博客">
 <meta property="og:description" content="Kotlin 与 Gradle 可谓是亲密的一对，JetBrains 与 Gradle 分别发表了Gradle Meets Kotlin与Kotlin Meets Gradle真的是激情满满。 使用kotlin 编写Gradle1.新建idea项目,构建工具选择gradle 2.填写groupID  选择默认的wrapper 一路下一步即可。 项目build成功后，修改build.gradle文件">
+<meta property="og:locale" content="en">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E4%B8%80%E6%AD%A5.jpg">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E4%BA%8C%E6%AD%A5.jpg">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E5%9B%9B%E5%BC%A0%E5%9B%BE%E7%89%87.jpg">
-<meta property="og:updated_time" content="2018-04-08T10:49:26.784Z">
+<meta property="og:updated_time" content="2018-06-30T10:47:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用kotlin编写Gradle">
 <meta name="twitter:description" content="Kotlin 与 Gradle 可谓是亲密的一对，JetBrains 与 Gradle 分别发表了Gradle Meets Kotlin与Kotlin Meets Gradle真的是激情满满。 使用kotlin 编写Gradle1.新建idea项目,构建工具选择gradle 2.填写groupID  选择默认的wrapper 一路下一步即可。 项目build成功后，修改build.gradle文件">
@@ -150,7 +152,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -195,42 +197,32 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-首页">
+        <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首页
+            Home
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-文章">
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            文章
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-学习">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
-            
-            学习
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-生活">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
-            
-            生活
+            Archives
           </a>
         </li>
       
@@ -294,9 +286,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T18:46:00+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T18:49:28+08:00">
                 2018-04-08
               </time>
             
@@ -404,6 +396,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+        </div>
+      
 
       
       
@@ -479,10 +477,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -500,16 +498,34 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -585,7 +601,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
