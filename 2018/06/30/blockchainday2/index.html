@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="赵成全的博客">
 <meta property="og:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
 <meta property="og:image" content="http://oqlpa1sab.bkt.clouddn.com/golang%E7%AC%AC%E4%BA%8C%E5%A4%A9%E6%89%93%E5%8D%B0.jpg">
-<meta property="og:updated_time" content="2018-06-30T02:35:26.000Z">
+<meta property="og:updated_time" content="2018-06-30T02:39:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="15天基于GoLang实现公有链（二）">
 <meta name="twitter:description" content="把区块链存储到数据库 严格来说是将所有区块存储数据库 Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-v">
@@ -344,7 +344,7 @@
 
       
         <h2 id="把区块链存储到数据库-严格来说是将所有区块存储数据库"><a href="#把区块链存储到数据库-严格来说是将所有区块存储数据库" class="headerlink" title="把区块链存储到数据库 严格来说是将所有区块存储数据库"></a>把区块链存储到数据库 严格来说是将所有区块存储数据库</h2><p> Bolt是基于纯Go语言开发的KV存储，灵感来自于Howard Chu的LMDB项目。该项目目标是开发一个简单、快速、可靠的无服务端的数据库。API非常小巧和简洁，仅仅关注如何获取或设置数据，这就是全部。 BoltDB是K-V存储，没有关系型数据库中类似表、行、列结构，数据以key-value对存储（类似GO语言中的map） 。相似的key-value对存储在同一bucket中，类似于关系型数据库中的Table。因此，为了获取一个value，需要知道其所在的bucket以及对应的key。这里我们选用Bolt,只需要执行下面代码安装即可。关于Bolt的使用，这里不在介绍，可以通过<a href="https://github.com/boltdb/bolt/" target="_blank" rel="noopener">官方github查看</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/boltdb/bolt/...</span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">**修改main中代码**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	go get github.com/boltdb/bolt/...</span><br><span class="line"></span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">**修改main中代码**</span><br></pre></td></tr></table></figure>
 <pre><code>package main
 </code></pre><p>import (<br>    “DavidChain/basicPrototype10/BLC”<br>    “fmt”<br>    “github.com/boltdb/bolt”<br>    “log”<br>)</p>
 <p>func main() {<br>    block := BLC.CreateBlock(“test”, 1, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})<br>    fmt.Printf(“%d\n”, block.Nonce)<br>    fmt.Printf(“%x\n”, block.Hash)</p>
@@ -419,7 +419,7 @@ if err != nil {
 }
 
 return block
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**在BlockChain中新增PrintChain方法**</span><br><span class="line">* 注意这里时间格式化输出必须为2006年，否则报错。</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**在BlockChain中新增PrintChain方法**</span><br><span class="line"></span><br><span class="line">* 注意这里时间格式化输出必须为2006年，否则报错。</span><br></pre></td></tr></table></figure>
 <pre><code>// 打印当前区块链信息
 </code></pre><p>func (chain *BlockChain) PrintChain() {<br>    chainIterator := chain.Iterator()<br>    for true {<br>        block := chainIterator.Next()<br>        fmt.Printf(“Height:%d\n”, block.Height)<br>        fmt.Printf(“ProblockHash:%x\n”, block.ProBlockHash)<br>        fmt.Printf(“currentHash:%x\n”, block.Hash)<br>        fmt.Printf(“Data:%s\n”, block.Data)<br>        fmt.Printf(“Nonce:%d\n”, block.Nonce)<br>        fmt.Printf(“Time:%v\n”, time.Unix(block.Timestamp, 0).Format(“2006-01-02 03:04:05 pm”))<br>        fmt.Println()</p>
 <pre><code>    var hashInt big.Int
