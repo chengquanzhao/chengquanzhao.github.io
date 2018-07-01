@@ -343,7 +343,7 @@
 <p><img src="http://oqlpa1sab.bkt.clouddn.com/gradle%E7%AC%AC%E4%BA%8C%E6%AD%A5.jpg" alt="gradle 第二张图片"></p>
 <p><strong>选择默认的wrapper 一路下一步即可。</strong></p>
 <p><strong>项目build成功后，修改build.gradle文件为build.gradle.kts文件删除原有build.gradle中的groovy语法 编写Kotlin代码如下：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">	//指定组件</span><br><span class="line">plugins &#123;</span><br><span class="line">    	application</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">application&#123;</span><br><span class="line">    mainClassName = &quot;AndroidOreo&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">	<span class="comment">//指定组件</span></span><br><span class="line"><span class="class">plugins </span>&#123;</span><br><span class="line">    	application</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">application&#123;</span><br><span class="line">    mainClassName = <span class="string">"AndroidOreo"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>新建kotlin类，代码如下</strong></p>
 <pre><code>class Cat(var name: String){
     fun sayMiao()= name+&quot;miao,miao&quot;
@@ -500,21 +500,12 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
 
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">categories</span>
-                
-              </div>
             
 
             
