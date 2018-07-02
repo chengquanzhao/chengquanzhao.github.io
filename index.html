@@ -251,6 +251,147 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/gofour /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="赵成全的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/02/gofour /" itemprop="url">15天基于GoLang实现公有链（四）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-02T19:25:53+08:00">
+                2018-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/07/02/gofour /" class="leancloud_visitors" data-flag-title="15天基于GoLang实现公有链（四）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="构造区块交易测试数据"><a href="#构造区块交易测试数据" class="headerlink" title="构造区块交易测试数据"></a>构造区块交易测试数据</h2><p>1,我们先通过一个区块只有一笔交易为基准进行处理，首页我们应该创建一笔交易，然后将交易放在Transaction[]的数组中。在Trasaiton中新建一个方法,根据上一个区块中的hash，该方法会生成转账时产生的transaction。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 转账时产生的transaction</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewSimpleTransation</span><span class="params">(from <span class="keyword">string</span>,to <span class="keyword">string</span>,amunt <span class="keyword">int</span>)</span>*<span class="title">Transaction</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> txInputs []*TXinput</span><br><span class="line">	<span class="keyword">var</span> txOutputs []*TxOutput</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//代表消费</span></span><br><span class="line">	tXinput := &amp;TXinput&#123;[]<span class="keyword">byte</span>&#123;&#125;, <span class="number">0</span>, from&#125;</span><br><span class="line">	<span class="comment">// 消费</span></span><br><span class="line">	txInputs = <span class="built_in">append</span>(txInputs,tXinput)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 转账</span></span><br><span class="line">	txOutput := &amp;TxOutput&#123;<span class="number">4</span>, to&#125;</span><br><span class="line"></span><br><span class="line">	outputs := <span class="built_in">append</span>(txOutputs, txOutput)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//找零</span></span><br><span class="line">	txOutput = &amp;TxOutput&#123;<span class="number">10</span><span class="number">-4</span>,from&#125;</span><br><span class="line">	outputs = <span class="built_in">append</span>(txOutputs,txOutput)</span><br><span class="line"></span><br><span class="line">	tx := Transaction&#123;[]<span class="keyword">byte</span>&#123;&#125;, txInputs, outputs&#125;</span><br><span class="line">	<span class="comment">//设置hash值</span></span><br><span class="line">	tx.HashTransation()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> &amp;tx</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行<code>./bc send -from &#39;[&quot;chegnquan&quot;]&#39; -to &#39;[&quot;xiaowei&quot;]&#39; -amount &#39;[&quot;4&quot;]&#39;</code> 这里我们模拟了<em>from–chengquan</em>到 <em>to–xiaowei</em> 的交易过程，并且记录到区块中。</p>
+<p>2,模拟第二笔交易，在第一笔交易中<em>xiaowei</em> 已经有了余额，这里我们执行 <code>./bc send -from &#39;[&quot;xiaowei&quot;]&#39; -to &#39;[&quot;tancheng&quot;]&#39; -amount &#39;[&quot;2&quot;]&#39;</code></p>
+<h2 id="在命令交互工具CLI中新建getBlance方法"><a href="#在命令交互工具CLI中新建getBlance方法" class="headerlink" title="在命令交互工具CLI中新建getBlance方法"></a>在命令交互工具CLI中新建getBlance方法</h2><p>在getBlance中进行交易测试。<br>1，先通过迭代器遍历所有区块</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">	<span class="built_in">block</span> := chainIterator.Next()</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="built_in">block</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> <span class="symbol">_</span>,tx := <span class="built_in">range</span> <span class="built_in">block</span>.TXs&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="built_in">var</span> hashInt big.Int</span><br><span class="line">	hashInt.SetBytes(<span class="built_in">block</span>.ProBlockHash)</span><br><span class="line">	<span class="keyword">if</span> hashInt.Cmp(big.NewInt(<span class="number">0</span>)) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="built_in">break</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2,判断<em>tx</em>是否有效 包括<em>txin</em>，<em>txout</em>是否有效，首先先遍历<em>txin</em>， 为<em>TXinput</em><br>添加方法，判断当前遍历区块中是否含有<em>txin</em>。同理<em>tout</em>中也应该添加判断方法。 </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(txoutput *TxOutput)</span><span class="title">UnlockScripPubKeyWithAddress</span><span class="params">(address <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123; </span><br><span class="line">	<span class="keyword">return</span> txoutput.ScripPubKey == address</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断当前消费是谁的money</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(txinput *TXinput)</span><span class="title">UnlockWithAddress</span><span class="params">(address <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> txinput.ScriptSig == address</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>遍历<em>vOUTS</em>,当交易数组中存在<em>Vin</em>的时，证明有交易产生，同时遍历<em>Vouts</em> 当<em>vouts</em> 中索引相同时证明是当前<em>vOUTS</em>的支出</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//vIN</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _, <span class="keyword">in</span> := range tx<span class="selector-class">.Vins</span> &#123;</span><br><span class="line">	<span class="comment">// 是否能够解锁</span></span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">in</span>.UnlockWithAddress(address) &#123;</span><br><span class="line"></span><br><span class="line">		encodeHash:= hex.EncodeToString(<span class="keyword">in</span>.TxHash)</span><br><span class="line">		spentOutputs[encodeHash] = append(spentOutputs[encodeHash],<span class="keyword">in</span>.Vout)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//vOUT</span></span><br><span class="line"><span class="keyword">for</span> index , out := range tx<span class="selector-class">.Vouts</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> out.UnlockScripPubKeyWithAddress(address) &#123;</span><br><span class="line">		<span class="keyword">for</span> txHash,indexArray := range  spentOutputs&#123;</span><br><span class="line">			<span class="keyword">if</span> txHash == hex.EncodeToString(tx.TxHash) &#123;</span><br><span class="line"></span><br><span class="line">				<span class="keyword">for</span> _,<span class="selector-tag">i</span>:= range indexArray&#123;</span><br><span class="line">					<span class="keyword">if</span> index == <span class="selector-tag">i</span> &#123;</span><br><span class="line">						<span class="comment">//todo 说明这笔钱已经花费了</span></span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，一笔钱的判断已经完成。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/01/gothree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1158,7 +1299,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
