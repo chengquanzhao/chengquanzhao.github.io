@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="赵成全的博客">
+<meta property="og:url" content="http://yoursite.com/2019/01/26/Binderjava层实现原理/index.html">
+<meta property="og:site_name" content="赵成全的博客">
+<meta property="og:description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjuntee77j30u01mnqhu.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fzjwht1af9j30v40akgng.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjwoo5438j32220f0gp0.jpg">
+<meta property="og:updated_time" content="2019-01-26T05:44:21.043Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="赵成全的博客">
+<meta name="twitter:description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjuntee77j30u01mnqhu.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/26/Binderjava层实现原理/"/>
+
+
+
+
+
+  <title> | 赵成全的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8935b65f0e313d931b01b9ed117f173d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+<a href="https://github.com/chengquanzhao"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+      
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">赵成全的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">人生如逆旅，我亦是行人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/26/Binderjava层实现原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Zhao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="赵成全的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-26T13:44:21+08:00">
+                2019-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/01/26/Binderjava层实现原理/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Binder-Java层实现原理"><a href="#Binder-Java层实现原理" class="headerlink" title="Binder Java层实现原理"></a>Binder Java层实现原理</h1><p>近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式。而是通过相对好理解的AIDL（也是大众认为的最好理解binder的方式）来熟悉binder。对AIDL不了解的朋友，可先行看下<a href="https://www.jianshu.com/p/23612b2cce30" title="AIDL" target="_blank" rel="noopener">三步掌握Android中的AIDL</a>来大致了解一下期使用方式。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fzjuntee77j30u01mnqhu.jpg" alt="复杂的binder"></p>
+<h2 id="Binder介绍"><a href="#Binder介绍" class="headerlink" title="Binder介绍"></a>Binder介绍</h2><p>这里我们不讲述上面复杂的实现。而是通过AIDL介绍binder的上层实现原理。Binder是Android中的一个类，它继承了IBinder接口。</p>
+<ul>
+<li>从IPC角度来说，Binder是Android中的一种跨进程通信方式。</li>
+<li>Binder还可以理解为一种虚拟的物理设备，它的设备驱动是/dev/binder，该通信方式在Linux中没有</li>
+<li>从Android Framework角度来说，Binder是ServiceManager连接各种 Manager（ActivityManager、WindowManager，等等）和相应ManagerService的桥梁；</li>
+<li>从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService的时候，服务端会返回一个包含了服务端业务调用的Binder对象，通过这个Binder对象，客户端就可以获取服务端提供的服务或者数据，这里的服务包括普通服务和基于AIDL的服务。</li>
+</ul>
+<p>下面是通过Aidl实现进程间通信的简化图，您可以不记住，这里有个印象就好。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fzjwht1af9j30v40akgng.jpg" alt=""></p>
+<h2 id="创建AIDL"><a href="#创建AIDL" class="headerlink" title="创建AIDL"></a>创建AIDL</h2><p>我们先创建三个文件分别为Market.java、 Market.aidl、ImarketManger.aidl文件 代码如下：</p>
+<p><code>Market.java</code></p>
+<pre><code>public class Market implements Parcelable {
+    private int goodsId;
+    private String goodsName;
+
+    public Market(int goodsId, String goodsName) {
+        this.goodsId = goodsId;
+        this.goodsName = goodsName;
+    }
+
+
+    protected Market(Parcel in) {
+        goodsId = in.readInt();
+        goodsName = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(goodsId);
+        dest.writeString(goodsName);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator&lt;Market&gt; CREATOR = new Creator&lt;Market&gt;() {
+        @Override
+        public Market createFromParcel(Parcel in) {
+            return new Market(in);
+        }
+
+        @Override
+        public Market[] newArray(int size) {
+            return new Market[size];
+        }
+    };
+}
+</code></pre><p><code>Market.aidl</code></p>
+<pre><code>// Market.aidl
+package com.ccdt.itvision.demo;
+
+parcelable Market;
+</code></pre><p><code>ImarketManger.aidl</code></p>
+<pre><code>// IMarketManger.aidl
+package com.ccdt.itvision.demo;
+import com.ccdt.itvision.demo.Market;
+// Declare any non-default types here with import statements
+
+interface IMarketManger {
+
+   List&lt;Market&gt; getGoodList();
+
+   void addGoods(in Market market);
+}
+</code></pre><p>上面三个文件中，Market表示一个超市食物类，它实现了Parcelable接口。Market.aidl是Market类在AIDL中的声明。IMarketManger.aidl是我们自己定义的一个接口。里面有两个方法。然后我们<code>rebuild project</code>会在 <em>app/build/generated/source/com.xxx.xxx/</em> 看见ImarketManger.java文件这个文件就是我们研究的重中之重！它的全部代码如下：</p>
+<pre><code>public interface IMarketManger extends android.os.IInterface {
+/**
+ * Local-side IPC implementation stub class.
+ */
+public static abstract class Stub extends android.os.Binder implements com.ccdt.itvision.viewlearning.IMarketManger {
+    private static final java.lang.String DESCRIPTOR = &quot;com.ccdt.itvision.demo.IMarketManger&quot;;
+
+    /**
+     * Construct the stub at attach it to the interface.
+     */
+    public Stub() {
+        this.attachInterface(this, DESCRIPTOR);
+    }
+
+    /**
+     * Cast an IBinder object into an com.ccdt.itvision.viewlearning.IMarketManger interface,
+     * generating a proxy if needed.
+     */
+    public static com.ccdt.itvision.viewlearning.IMarketManger asInterface(android.os.IBinder obj) {
+        if ((obj == null)) {
+            return null;
+        }
+        android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+        if (((iin != null) &amp;&amp; (iin instanceof com.ccdt.itvision.viewlearning.IMarketManger))) {
+            return ((com.ccdt.itvision.viewlearning.IMarketManger) iin);
+        }
+        return new com.ccdt.itvision.viewlearning.IMarketManger.Stub.Proxy(obj);
+    }
+
+    @Override
+    public android.os.IBinder asBinder() {
+        return this;
+    }
+
+    @Override
+    public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException {
+        switch (code) {
+            case INTERFACE_TRANSACTION: {
+                reply.writeString(DESCRIPTOR);
+                return true;
+            }
+            case TRANSACTION_getGoodList: {
+                data.enforceInterface(DESCRIPTOR);
+                java.util.List&lt;com.ccdt.itvision.viewlearning.Market&gt; _result = this.getGoodList();
+                reply.writeNoException();
+                reply.writeTypedList(_result);
+                return true;
+            }
+            case TRANSACTION_addGoods: {
+                data.enforceInterface(DESCRIPTOR);
+                com.ccdt.itvision.viewlearning.Market _arg0;
+                if ((0 != data.readInt())) {
+                    _arg0 = com.ccdt.itvision.demo.Market.CREATOR.createFromParcel(data);
+                } else {
+                    _arg0 = null;
+                }
+                this.addGoods(_arg0);
+                reply.writeNoException();
+                return true;
+            }
+        }
+        return super.onTransact(code, data, reply, flags);
+    }
+
+    private static class Proxy implements com.ccdt.itvision.viewlearning.IMarketManger {
+        private android.os.IBinder mRemote;
+
+        Proxy(android.os.IBinder remote) {
+            mRemote = remote;
+        }
+
+        @Override
+        public android.os.IBinder asBinder() {
+            return mRemote;
+        }
+
+        public java.lang.String getInterfaceDescriptor() {
+            return DESCRIPTOR;
+        }
+
+        @Override
+        public java.util.List&lt;com.ccdt.itvision.viewlearning.Market&gt; getGoodList() throws android.os.RemoteException {
+            android.os.Parcel _data = android.os.Parcel.obtain();
+            android.os.Parcel _reply = android.os.Parcel.obtain();
+            java.util.List&lt;com.ccdt.itvision.viewlearning.Market&gt; _result;
+            try {
+                _data.writeInterfaceToken(DESCRIPTOR);
+                mRemote.transact(Stub.TRANSACTION_getGoodList, _data, _reply, 0);
+                _reply.readException();
+                _result = _reply.createTypedArrayList(com.ccdt.itvision.viewlearning.Market.CREATOR);
+            } finally {
+                _reply.recycle();
+                _data.recycle();
+            }
+            return _result;
+        }
+
+        @Override
+        public void addGoods(com.ccdt.itvision.viewlearning.Market market) throws android.os.RemoteException {
+            android.os.Parcel _data = android.os.Parcel.obtain();
+            android.os.Parcel _reply = android.os.Parcel.obtain();
+            try {
+                _data.writeInterfaceToken(DESCRIPTOR);
+                if ((market != null)) {
+                    _data.writeInt(1);
+                    market.writeToParcel(_data, 0);
+                } else {
+                    _data.writeInt(0);
+                }
+                mRemote.transact(Stub.TRANSACTION_addGoods, _data, _reply, 0);
+                _reply.readException();
+            } finally {
+                _reply.recycle();
+                _data.recycle();
+            }
+        }
+    }
+
+    static final int TRANSACTION_getGoodList = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+    static final int TRANSACTION_addGoods = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+}
+
+public java.util.List&lt;com.ccdt.itvision.viewlearning.Market&gt; getGoodList() throws android.os.RemoteException;
+
+public void addGoods(com.ccdt.itvision.viewlearning.Market market) throws android.os.RemoteException;
+}
+</code></pre><p>看起来很复杂，但其实这个类逻辑还是蛮清晰。我们缩进下代码在看。<br><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fzjwoo5438j32220f0gp0.jpg" alt=""><br>首先这里声明了两个方法，<code>getGoodList()</code> 和 <code>addGoods()</code> 。这两个方法显然是我们在ImarketManger中声明的。然后是一个静态的内部类Stub。stub继承自Binder，显然他自己就是一个Binder类。当客户端和服务端都位于同一个进程时，方法调用不会走跨进程的transact过程，而当两者位于不同进程时，方法调用需要走transact过程，这个逻辑由Stub的内部代理类Proxy来完成。所以这里的核心就是Stub的内部代理Proxy。Proxy内部方法如下：</p>
+<ul>
+<li>asInterface(android.os.IBinder obj)</li>
+</ul>
+<blockquote>
+<p>用于将服务端的Binder对象转换成客户端所需的AIDL接口类型的对象，这种转换过程是区分进程的，如果客户端和服务端位于同一进程，那么此方法返回的就是服务端的Stub对象本身，否则返回的是系统封装后的Stub.proxy对象。</p>
+</blockquote>
+<ul>
+<li>asBinder</li>
+</ul>
+<blockquote>
+<p>此方法用于返回当前Binder对象</p>
+</blockquote>
+<ul>
+<li>onTransact</li>
+</ul>
+<blockquote>
+<p>此方法运行在服务端中的Binder线程池中，当客户端通过aidl发起跨进程请求时，远程请求会通过系统底层封装后交由此方法来处理。服务端通过code可以确定客户端所请求的方法是什么，接着从data中取出该方法所需的参数（没参数则不取），然后执行该方法。当该方法执行完毕后，就向reply中写入返回值，这就是onTransact的执行过程。值得注意的是，如果此方法返回false，那么客户端的请求会失败</p>
+</blockquote>
+<ul>
+<li>Proxy#getGoodsList</li>
+</ul>
+<blockquote>
+<p>首先创建该方法所需要的输入型Parcel对象_data、输出型Parcel对象_reply。<br>声明返回值对象List<market>。<br>_data.writeInterfaceToken(DESCRIPTOR); 将该方法所需参数信息写入data 中。<br>接着调用transact方法来发起RPC（远程过程调用）请求，当前线程hang on（挂起），当服务端 onTransact（刚介绍完的方法，回头去看一看）执行完毕后。从_reply中取出RPC过程的返回结果处理完毕。</market></p>
+</blockquote>
+<p>通过以上分析，下面我们在回头看刚刚的简图是不是就明朗了许多？</p>
+<h2 id="手写一个AIDL的实现类"><a href="#手写一个AIDL的实现类" class="headerlink" title="手写一个AIDL的实现类"></a>手写一个AIDL的实现类</h2><p>从上述分析过程来看，我们完全可以不提供AIDL文件即可实现Binder，之所以提供AIDL文件，是为了方便系统为我们生成代码。系统根据AIDL文件生成Java文件的格式是固定的，我们可以不用AIDL文件直接写一个Binder出来。</p>
+<p>首先声明一个接口继承 <code>IInterface</code> 代码如下：</p>
+<pre><code>public interface IMarketManger extends IInterface {
+    static final String DESCRIPTOR = &quot;com.ccdt.itvision.demo.custombinder.IMarketManger&quot;;
+    static final int TRANSACTION_getGoodList = IBinder.FIRST_CALL_TRANSACTION + 0;
+    static final int TRANSACTION_addGood = IBinder.FIRST_CALL_TRANSACTION+1;
+    public List&lt;Market&gt; getGoodList() throws RemoteException;
+    public void addGoods(Market market) throws RemoteException;
+}
+</code></pre><p>接着，创建ImarketManger的实现类，实现思路与AIDL生成的代码类似。如果服务端使用手写Binder，只需要在onBinder的时候返回ImarketManger的实现类就好。代码如下：</p>
+<pre><code>public class MarketImpl extends Binder implements IMarketManger {
+
+public MarketImpl() {
+    this.attachInterface(this, DESCRIPTOR);
+}
+
+public static IMarketManger asInterface(IBinder obj) {
+    if (obj == null) {
+        return null;
+    }
+    IInterface iInterface = obj.queryLocalInterface(DESCRIPTOR);
+    if (iInterface != null &amp;&amp; iInterface instanceof IMarketManger) {
+
+        return (IMarketManger) iInterface;
+    }
+    return new MarketImpl.Proxy(obj);
+}
+
+@Override
+public List&lt;Market&gt; getGoodList() throws RemoteException {
+    return null;
+}
+
+@Override
+public void addGoods(Market good) throws RemoteException {
+
+}
+
+@Override
+public IBinder asBinder() {
+    return this;
+}
+
+
+@Override
+protected boolean onTransact(int code, @NonNull Parcel data, @Nullable Parcel reply, int flags) throws RemoteException {
+    switch (code) {
+        case INTERFACE_TRANSACTION:
+            reply.writeString(DESCRIPTOR);
+            return true;
+
+        case TRANSACTION_getGoodList:
+            data.enforceInterface(DESCRIPTOR);
+            List&lt;Market&gt; goodList = this.getGoodList();
+            reply.writeNoException();
+            reply.writeTypedList(goodList);
+            return true;
+
+        default:
+
+            break;
+    }
+    return super.onTransact(code, data, reply, flags);
+
+}
+
+
+private static class Proxy implements IMarketManger {
+    private IBinder mRemote;
+
+    public Proxy(IBinder obj) {
+        mRemote = obj;
+    }
+
+    @Override
+    public List&lt;Market&gt; getGoodList() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        List&lt;Market&gt; result;
+        try {
+            data.writeInterfaceToken(DESCRIPTOR);
+            mRemote.transact(TRANSACTION_getGoodList, data, reply, 0);
+            reply.readException();
+            result = reply.createTypedArrayList(Market.CREATOR);
+        } finally {
+            reply.recycle();
+            data.recycle();
+        }
+        return result;
+    }
+
+    @Override
+    public void addGoods(Market market) throws RemoteException {
+        // TODO: 与aidl中一样
+    }
+
+
+    @Override
+    public IBinder asBinder() {
+        return mRemote;
+    }
+}
+</code></pre><p> Aidl只是Google为我们实现Binder 实现的一个简便方式生成模板化代码，事实上我们完全可以这样手写一个aidl，这有利于我们理解Bidner的实现方式。另外Binder还有个重要的方法，<code>Linktodeath（）</code><br> 因服务端的情况我们未知，可能出现异常情况，当binder 死亡时，我们可以通过binder死亡代理 知道链接已经断开，重新绑定链接。</p>
+<p><strong>最后Binder的实现机制看似复杂，但是其中很有条理，如果你想使用组件化方案，了解android底层原理，做framwork层代码，binder 使我们绕不开的话题，所以先在Aidl开始了解并深入，对您的成长是非常有意义的！</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="David Zhao WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/17/drawable的使用/" rel="next" title="Android Drawable的详细使用">
+                <i class="fa fa-chevron-left"></i> Android Drawable的详细使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">David Zhao</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/chengquanzhao" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/mruso" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Binder-Java层实现原理"><span class="nav-number">1.</span> <span class="nav-text">Binder Java层实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Binder介绍"><span class="nav-number">1.1.</span> <span class="nav-text">Binder介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建AIDL"><span class="nav-number">1.2.</span> <span class="nav-text">创建AIDL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手写一个AIDL的实现类"><span class="nav-number">1.3.</span> <span class="nav-text">手写一个AIDL的实现类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Zhao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("C8XA9aOzIxvLkajLKAbd2wwB-gzGzoHsz", "YOmXcx5jgUN6wIwE41s82jgY");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
+
