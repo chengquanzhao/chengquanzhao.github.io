@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -80,8 +80,9 @@
 
 
 <meta name="description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="赵成全的博客">
+<meta property="og:title" content="Binder的实现原理简析">
 <meta property="og:url" content="http://yoursite.com/2019/01/26/Binderjava层实现原理/index.html">
 <meta property="og:site_name" content="赵成全的博客">
 <meta property="og:description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
@@ -89,9 +90,9 @@
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjuntee77j30u01mnqhu.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fzjwht1af9j30v40akgng.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjwoo5438j32220f0gp0.jpg">
-<meta property="og:updated_time" content="2019-01-26T05:44:21.043Z">
+<meta property="og:updated_time" content="2019-01-26T06:02:09.203Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="赵成全的博客">
+<meta name="twitter:title" content="Binder的实现原理简析">
 <meta name="twitter:description" content="Binder Java层实现原理近日在做组件化方案时，复习了一遍Bidner机制，在熟悉了一遍Bidner机制后，对进程间通讯以及Android设计模式原来有了较深的感悟。 Android Binder 是一个及其深入的话题，从Linux间进程通信的方式，到Android间通信方式都需要了解，下图是binder大致实现（看完我就晕了）。本文不通过复杂的代码细节，以及底层代码分析Binder实现方式">
 <meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzjuntee77j30u01mnqhu.jpg">
 
@@ -129,7 +130,7 @@
 
 
 
-  <title> | 赵成全的博客</title>
+  <title>Binder的实现原理简析 | 赵成全的博客</title>
   
 
 
@@ -275,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Binder的实现原理简析</h1>
         
 
         <div class="post-meta">
@@ -305,7 +306,7 @@
 
           
           
-             <span id="/2019/01/26/Binderjava层实现原理/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2019/01/26/Binderjava层实现原理/" class="leancloud_visitors" data-flag-title="Binder的实现原理简析">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -699,6 +700,12 @@ private static class Proxy implements IMarketManger {
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
       
 
       
